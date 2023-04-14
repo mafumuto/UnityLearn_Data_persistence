@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -18,10 +19,19 @@ public class MainManager : MonoBehaviour
     
     private bool m_GameOver = false;
 
-    
+
+    public Text bestScoreText;
+    //public int bestscore = 0;
+
+    private void Awake()
+    {
+
+    }
+
     // Start is called before the first frame update
     void Start()
     {
+        GetBestScore();
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -72,5 +82,22 @@ public class MainManager : MonoBehaviour
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+        GetBestScore();
     }
+
+    void GetBestScore()
+    {
+        if (m_Points > DataPersistence.Instance.bestscore)
+        {
+            DataPersistence.Instance.bestscore = m_Points;
+            DataPersistence.Instance.SaveDataToJson();
+            bestScoreText.text = $"Best Score : {DataPersistence.Instance._userName} : {DataPersistence.Instance.bestscore}";
+        }
+        else
+        {
+            bestScoreText.text = $"Best Score : {DataPersistence.Instance.userName} : {DataPersistence.Instance.bestscore}";
+        }
+        
+    }
+
 }
